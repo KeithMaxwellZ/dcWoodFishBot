@@ -86,10 +86,25 @@ def knock(uid: str):
         # print(val, draw)
         if draw < val:
             res += knock_once()
+    if database[uid]['broken']:
+        res *= -1
+    else:
+        b = random.randint(0, 1000)
+        if b == 0:
+            database[uid]['broken'] = True
 
     database[uid]['honor'] += res
 
     return res
+
+
+def replace_wf(uid: str):
+    if database[uid]['broken']:
+        database[uid]['broken'] = False
+        return True
+    else:
+        database[uid]['honor'] -= 100
+        return False
 
 
 def get_rank():

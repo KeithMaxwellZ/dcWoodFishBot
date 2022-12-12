@@ -18,29 +18,61 @@ count = 0
 
 @client.command(name='knock')
 async def knock(ctx: commands.context.Context):
-    def gen_embed(author_name, val, inc):
-        embed = discord.Embed(title="电子木鱼", description=f"获得了{inc}点功德", color=0xff5757)
-        embed.set_thumbnail(url="https://static5.qiang100.com/images/zhuanti-icon2/original/400/muyu4.jpg")
-        embed.add_field(name=f"{author_name} 当前功德", value=f"{val}", inline=True)
-
-        return embed
-
-    async def btn_callback(interaction: discord.Interaction):
+    async def again_callback(interaction: discord.Interaction):
         tname = interaction.user
         tuid = interaction.user.id
         tuid = str(tuid)
         rval = process(tuid)
-        await interaction.response.send_message(embed=gen_embed(tname, database[str(tuid)]['honor'], rval), view=view)
+
+        embed = discord.Embed(title="电子木鱼", description=f"获得了{rval}点功德", color=0xff5757)
+        embed.set_thumbnail(url="https://static5.qiang100.com/images/zhuanti-icon2/original/400/muyu4.jpg")
+        embed.add_field(name=f"{tname} 当前功德", value=f"{database[str(tuid)]['honor']}", inline=False)
+
+        if database[tuid]['broken']:
+            embed.add_field(name=f"木鱼损坏！！", value=f"0", inline=False)
+
+        await interaction.response.send_message(embed=embed, view=view)
+
+    async def replace_callback(interaction: discord.Interaction):
+        tname = interaction.user
+        tuid = interaction.user.id
+        tuid = str(tuid)
+        res = replace_wf(tuid)
+        if res:
+            embed = discord.Embed(title="电子木鱼", description=f"已替换新木鱼", color=0xff5757)
+            embed.set_thumbnail(url="https://static5.qiang100.com/images/zhuanti-icon2/original/400/muyu4.jpg")
+            embed.add_field(name=f"{tname} 当前功德", value=f"{database[str(tuid)]['honor']}", inline=True)
+
+            await interaction.response.send_message(embed=embed, view=view)
+        else:
+            embed = discord.Embed(title="电子木鱼", description=f"木鱼没有坏！-100功德！", color=0xff5757)
+            embed.set_thumbnail(url="https://static5.qiang100.com/images/zhuanti-icon2/original/400/muyu4.jpg")
+            embed.add_field(name=f"{tname} 当前功德", value=f"{database[str(tuid)]['honor']}", inline=True)
+
+            await interaction.response.send_message(embed=embed, view=view)
+
 
     uid = ctx.author.id
     uid = str(uid)
     rval = process(uid)
 
-    btn = Button(label="敲一下", style=discord.ButtonStyle.blurple)
-    btn.callback = btn_callback
+    again = Button(label="敲一下", style=discord.ButtonStyle.blurple)
+    again.callback = again_callback
+
+    replace = Button(label="替换新木鱼", style=discord.ButtonStyle.blurple)
+    replace.callback = replace_callback
+
     view = View()
-    view.add_item(btn)
-    await ctx.send(embed=gen_embed(ctx.message.author, database[str(uid)]['honor'], rval), view=view)
+    view.add_item(again)
+    view.add_item(replace)
+
+    embed = discord.Embed(title="电子木鱼", description=f"获得了{rval}点功德", color=0xff5757)
+    embed.set_thumbnail(url="https://static5.qiang100.com/images/zhuanti-icon2/original/400/muyu4.jpg")
+    embed.add_field(name=f"{ctx.message.author} 当前功德", value=f"{database[str(uid)]['honor']}", inline=False)
+    if database[uid]['broken']:
+        embed.add_field(name=f"木鱼损坏！！", value=f"0", inline=False)
+
+    await ctx.send(embed=embed, view=view)
 
 
 @client.command(name='draw')
