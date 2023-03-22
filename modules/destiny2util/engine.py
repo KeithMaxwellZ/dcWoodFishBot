@@ -35,5 +35,9 @@ def search(w_type: str, perk1: str, perk2=None):
         res = p1lst
 
     print(len(p1lst))
+    name_lst = []
     for wpn in res:
-        pprint(database['DestinyInventoryItemDefinition'][wpn]['displayProperties']['name'])
+        name = database['DestinyInventoryItemDefinition'][wpn]['displayProperties']['name']
+        name_lst.append(name)
+
+    return name_lst

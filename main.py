@@ -4,6 +4,7 @@ from discord.ui import Button, View
 
 from modules.chatgptApi import gpt_engine
 from modules.woodenFish.wood_fish_engine import *
+from modules.destiny2util.engine import *
 
 with open("info.json", 'r') as f:
     bot_info = json.load(f)
@@ -129,7 +130,7 @@ async def stat(ctx: commands.context.Context, *args):
 
 @client.command(name='perk')
 async def stat(ctx: commands.context.Context, *args):
-    print(args)
+    r = search(None, args[0], args[1])
 
     await ctx.reply(content="Received")
 
