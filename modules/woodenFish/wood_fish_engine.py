@@ -7,11 +7,9 @@ database = {}
 for i in os.listdir('./data/dcWoodFish'):
     name = i.split('.')
     name = name[0]
-    print(name)
     with open(f"./data/dcWoodFish/{i}", "r") as f:
         database[name] = json.load(f)
 
-print(database)
 # uid: str
 # honor: int
 # monks: int[8]
@@ -26,7 +24,6 @@ actual = []
 for i in range(6):
     actual.append(base)
     base = base / 2
-print(actual)
 
 
 text = ["方丈", "两序", "堂主", "都监", "比丘", "沙弥"]
