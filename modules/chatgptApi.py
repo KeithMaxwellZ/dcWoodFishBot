@@ -3,7 +3,7 @@ import traceback
 import openai
 import logging
 
-with open("info.json", 'r') as f:
+with open("./info.json", 'r') as f:
     d = json.load(f)
     KEY = d['chatGPT_KEY']
     openai.organization = d['chatGPT_org']
