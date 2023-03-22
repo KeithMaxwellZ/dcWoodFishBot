@@ -130,8 +130,13 @@ async def stat(ctx: commands.context.Context, *args):
 
 @client.command(name='perk')
 async def stat(ctx: commands.context.Context, *args):
-    r = search(None, args[0], args[1])
-
+    if len(args) == 1:
+        r = search(None, args[0])
+    elif len(args) == 2:
+        r = search(None, args[0], args[1])
+    else:
+        r = []
+    pprint(r)
     await ctx.reply(content="Received")
 
 

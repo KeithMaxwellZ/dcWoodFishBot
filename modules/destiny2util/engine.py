@@ -1,5 +1,4 @@
-from api import *
-from update import *
+from modules.destiny2util.update import *
 
 with open(f'./data/destiny2util/en.json', 'r') as f:
     database = json.load(f)
@@ -8,7 +7,7 @@ langs = ('en', )
 refresh(langs[0])
 
 
-def search(w_type: str, perk1: str, perk2=None):
+def search(w_type, perk1: str, perk2=None):
     res = []
     p1hash = None
     p2hash = None
